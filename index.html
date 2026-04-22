@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kassette unlisted mods</title>
+    <style>
+        @font-face {
+            font-family: 'Letterstuff';
+            src: url('https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/fonts/Letterstuff.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'PhantomMuff';
+            src: url('https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/fonts/PhantomMuff.ttf') format('truetype');
+        }
+
+        :root {
+            --bg-main: #0d0614;
+            --bg-panel: rgba(15, 8, 30, 0.6);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --text-main: #e0d8f0;
+            --text-muted: rgba(224, 216, 240, 0.6);
+            --accent-blue: #2d194b;
+            --accent-light: #5c5587;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Protección global para evitar arrastrar imágenes */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none; /* Evita clics derechos sobre la imagen en algunos navegadores */
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'PhantomMuff', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            letter-spacing: 0.5px;
+        }
+
+        body.lang-es .en-text { display: none !important; }
+        body.lang-en .es-text { display: none !important; }
+
+        h1, h2, .nav-brand, .section-title, .info-title {
+            font-family: 'Letterstuff', cursive;
+            letter-spacing: 2px;
+        }
+
+        .navbar {
+            background-color: var(--bg-panel);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 1.4em;
+            text-transform: uppercase;
+            text-decoration: none;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+
+        .nav-brand img {
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .nav-right-container {
+            display: flex;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background-color: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-family: 'PhantomMuff', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent-light);
+            color: #fff;
+            border-color: var(--accent-light);
+            box-shadow: 0 0 10px rgba(92, 85, 135, 0.4);
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px;
+            gap: 40px;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(45, 25, 75, 0.2) 0%, rgba(15, 8, 30, 0.4) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .info-title {
+            color: #fff;
+            font-size: 1.4em;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+        }
+
+        .section-header {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0px var(--accent-blue);
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 1.1em;
+        }
+
+        .mod-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .mod-card {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .mod-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-color: var(--accent-light);
+        }
+
+        .mod-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mod-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .mod-title {
+            font-family: 'PhantomMuff', sans-serif;
+            color: #fff;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            letter-spacing: 0.5px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--accent-light);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-family: 'Letterstuff', cursive;
+            font-size: 1.2em;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            margin-top: auto;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 var(--accent-blue);
+        }
+
+        .btn:hover {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--accent-blue);
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 var(--accent-blue);
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="lang-en">
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/kssetteIcon.png" alt="Logo" draggable="false">
+            kassette unlisted mods
+        </div>
+        <div class="nav-right-container">
+            <div class="nav-actions">
+                <button id="btn-en" class="lang-btn active" onclick="switchGlobalLanguage('en')">EN</button>
+                <button id="btn-es" class="lang-btn" onclick="switchGlobalLanguage('es')">ES</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        
+        <aside class="sidebar">
+            <div class="info-box">
+                <h3 class="info-title">
+                    <span class="en-text">About this Hub</span>
+                    <span class="es-text">Sobre este Repositorio</span>
+                </h3>
+                <p style="font-size: 1em; line-height: 1.5;">
+                    <span class="en-text">Here you'll find my mods that I can't or don't want to upload to GameBanana, nothing really important.</span>
+                    <span class="es-text">Aqui encontraras mis mods que no puedo o no quiero subir a gamebanana, realmente nada importante</span>
+                </p>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            
+            <div class="section-header">
+                <h1 class="section-title">
+                    <span class="en-text">Mods</span>
+                    <span class="es-text">Mods</span>
+                </h1>
+                <p class="section-desc">
+                    <span class="en-text">All available mods.</span>
+                    <span class="es-text">todos los mods disponibles</span>
+                </p>
+            </div>
+
+            <div class="mod-grid">
+                
+                <article class="mod-card">
+                    <div class="mod-thumb" style="background-image: url('https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/midfight-images/MFMportpromo.png');">
+                    </div>
+                    <div class="mod-body">
+                        <h3 class="mod-title">Mid Fight Masses V-Slice Port Unsarved Engine Edition</h3>
+                        <a href="mfm_port.html" class="btn">
+                            <span class="en-text">View Page</span>
+                            <span class="es-text">Ver Página</span>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="mod-card">
+                    <div class="mod-thumb" style="background-image: url('https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/cge-images/CGEpromo.png');">
+                    </div>
+                    <div class="mod-body">
+                        <h3 class="mod-title">Cassette Girl Extras Collection</h3>
+                        <a href="cg_extras.html" class="btn">
+                            <span class="en-text">View Page</span>
+                            <span class="es-text">Ver Página</span>
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function switchGlobalLanguage(lang) {
+            document.body.className = `lang-${lang}`;
+
+            const btnEn = document.getElementById('btn-en');
+            const btnEs = document.getElementById('btn-es');
+
+            if (lang === 'en') {
+                btnEn.classList.add('active');
+                btnEs.classList.remove('active');
+            } else {
+                btnEs.classList.add('active');
+                btnEn.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>

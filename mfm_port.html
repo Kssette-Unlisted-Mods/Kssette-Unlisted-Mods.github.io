@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFM V-Slice Port - kassette unlisted mods</title>
+    
+    <style>
+        @font-face {
+            font-family: 'Letterstuff';
+            src: url('https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/fonts/Letterstuff.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'PhantomMuff';
+            src: url('https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/fonts/PhantomMuff.ttf') format('truetype');
+        }
+
+        :root {
+            --bg-main: #0d0614;
+            --bg-panel: rgba(15, 8, 30, 0.8);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --text-main: #e0d8f0;
+            --text-muted: rgba(224, 216, 240, 0.6);
+            --accent-pink: #f0306b;
+            --accent-pink-hover: #d12257;
+            --accent-blue: #2d194b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'PhantomMuff', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            letter-spacing: 0.5px;
+        }
+
+        h1, h2, h3, .nav-brand {
+            font-family: 'Letterstuff', cursive;
+            letter-spacing: 2px;
+        }
+
+        .navbar {
+            background-color: var(--bg-panel);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 1.4em;
+            text-transform: uppercase;
+            text-decoration: none;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            pointer-events: auto;
+        }
+
+        .nav-brand img {
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px;
+            gap: 40px;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            background: linear-gradient(135deg, rgba(45, 25, 75, 0.4) 0%, rgba(15, 8, 30, 0.6) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mod-header {
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .mod-title {
+            color: #fff;
+            font-size: 3em;
+            margin-bottom: 10px;
+            line-height: 1.1;
+            text-shadow: 3px 3px 0px var(--accent-pink);
+        }
+
+        .mod-subtitle {
+            color: var(--text-muted);
+            font-size: 1.2em;
+        }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .carousel-track img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(13, 9, 18, 0.8);
+            color: white;
+            border: 2px solid var(--border-color);
+            padding: 12px 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: all 0.2s;
+            z-index: 2;
+            pointer-events: auto;
+        }
+
+        .gallery-container:hover .carousel-btn {
+            opacity: 1;
+        }
+
+        .carousel-btn.left { left: 15px; }
+        .carousel-btn.right { right: 15px; }
+
+        .carousel-btn:hover {
+            background-color: var(--accent-pink);
+            border-color: var(--accent-pink);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .lang-btn {
+            background-color: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+            font-family: 'PhantomMuff', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 10px rgba(240, 48, 107, 0.3);
+        }
+
+        .readme-content {
+            font-size: 1.2em;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        .readme-content p {
+            margin-bottom: 15px;
+        }
+
+        .readme-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            background: rgba(0,0,0,0.2);
+            padding: 20px 20px 20px 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .readme-content li {
+            margin-bottom: 12px;
+        }
+
+        .readme-content strong {
+            color: var(--accent-pink);
+        }
+
+        .password-box {
+            background-color: rgba(0,0,0,0.4);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .password-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+        }
+
+        .password-box p:first-child {
+            font-family: 'PhantomMuff', sans-serif;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(45, 25, 75, 0.4) 0%, rgba(15, 8, 30, 0.6) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .info-title {
+            color: #fff;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            font-family: 'Letterstuff', cursive;
+        }
+
+        .credit-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-blue);
+            transition: transform 0.2s;
+        }
+
+        .credit-item:hover {
+            transform: translateX(5px);
+            border-left-color: var(--accent-pink);
+        }
+
+        .credit-name {
+            color: #fff;
+            display: block;
+            margin-bottom: 4px;
+            text-decoration: none;
+            font-size: 1.1em;
+            pointer-events: auto;
+        }
+
+        .credit-name[href] {
+            color: var(--accent-pink);
+        }
+
+        .credit-name[href]:hover {
+            text-decoration: underline;
+        }
+
+        .credit-role {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            line-height: 1.2;
+        }
+
+        .meta-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .meta-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 1em;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .meta-label {
+            color: var(--text-muted);
+        }
+
+        .meta-value {
+            color: #fff;
+        }
+
+        .btn-download {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--accent-pink);
+            color: #fff;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-family: 'PhantomMuff', sans-serif;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 0 var(--accent-pink-hover), 0 10px 20px rgba(240, 48, 107, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+            pointer-events: auto;
+        }
+
+        .btn-download:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 var(--accent-pink-hover), 0 8px 15px rgba(240, 48, 107, 0.4);
+        }
+
+        .btn-download:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 var(--accent-pink-hover);
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .sidebar {
+                width: 100%;
+                order: -1;
+            }
+            .carousel-btn {
+                opacity: 1;
+            }
+            .mod-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/kssetteIcon.png" alt="Logo" draggable="false">
+            <span style="color: var(--text-muted); margin-right: 8px; font-family: 'PhantomMuff', sans-serif; font-size: 0.8em; text-shadow: none;">&larr; Back to</span> kassette unlisted mods
+        </a>
+    </nav>
+
+    <div class="main-container">
+        
+        <main class="content-area">
+            <div class="mod-header">
+                <h1 class="mod-title">Mid Fight Masses V-Slice Port Unsarved Engine Edition</h1>
+                <p class="mod-subtitle">Unsarved Engine edition for Mid Fight Masses Mod</p>
+            </div>
+
+            <div class="gallery-container">
+                <div class="carousel-track" data-slide="0">
+                    <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/midfight-images/MFMportpromo.png" alt="Cover" draggable="false">
+                    <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/midfight-images/screenshoot%20(1).png" alt="Screenshot 1" draggable="false">
+                    <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/midfight-images/screenshoot%20(2).png" alt="Screenshot 2" draggable="false">
+                    <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/midfight-images/screenshoot%20(3).png" alt="Screenshot 3" draggable="false">
+                    <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/midfight-images/screenshoot%20(4).png" alt="Screenshot 4" draggable="false">
+                    <img src="https://raw.githubusercontent.com/Kssette-Unlisted-Mods/Kssette-Unlisted-Mods.github.io/main/resources/midfight-images/screenshoot%20(5).png" alt="Screenshot 5" draggable="false">
+                </div>
+                <button class="carousel-btn left" onclick="moveSlide(this, -1)">&#10094;</button>
+                <button class="carousel-btn right" onclick="moveSlide(this, 1)">&#10095;</button>
+            </div>
+
+            <div class="language-toggle">
+                <button id="btn-en" class="lang-btn active" onclick="switchLanguage('en')">English</button>
+                <button id="btn-es" class="lang-btn" onclick="switchLanguage('es')">Español</button>
+            </div>
+
+            <div id="content-en" class="readme-content">
+                <p>Hello! If you have this download link, I want to thank you for downloading this mod.</p>
+                <p>However, I would like you to keep a few things in mind:</p>
+                <ul>
+                    <li><strong>Public Port:</strong> This port is public. Since it is based on a mod that is currently banned from GameBanana, you have total freedom to redistribute it.</li>
+                    <li><strong>Updates:</strong> If you don't want to worry about manually looking for updates, you can keep this version, as updates for new V-Slice versions or new features will be released here.</li>
+                    <li><strong>Credits:</strong> Do not credit yourself as the creator of this port. Not only because it is clearly not yours, but also to avoid issues with someone looking to report you. Just enjoy the mod and help others enjoy it too. <strong>Note: Add a "." at the end of the password.</strong></li>
+                    <li><strong>Derivative Works:</strong> If you want to create other mods based on this one, you are free to do so. Ultimately, since this isn't on GameBanana, I have no control over what you do with this mod.</li>
+                    <li><strong>Exception:</strong> P-Slice. I do not want to see my icons used in that engine.</li>
+                    <li><strong>Custom Patches:</strong> You can create your own patches for this mod and share them with friends and followers. Many of us want this mod to remain playable with the best possible experience.</li>
+                </ul>
+                <p>Thank you for reading, and enjoy the mod! :)</p>
+                
+                <div class="password-box">
+                    <p style="margin: 0; color: #fff; font-size: 1.5em; letter-spacing: 2px;">Password: <span style="color: var(--accent-pink);">massSarvPass</span></p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: var(--text-muted);">Not working? Read the document again.</p>
+                </div>
+            </div>
+
+            <div id="content-es" class="readme-content" style="display: none;">
+                <p>Hola, si tienes este link de descarga te damos las gracias por descargar este mod.</p>
+                <p>Pero quiero que tengas cosas a consideración:</p>
+                <ul>
+                    <li><strong>Este port es público:</strong> Al ser de un mod que está prohibido en GameBanana, tienes total libertad de redistribuirlo.</li>
+                    <li><strong>Actualizaciones:</strong> Si no te quieres preocupar de updates, puedes conservar este link, ya que aquí se irán lanzando actualizaciones de este mod para nuevas versiones de V-Slice o nuevas features.</li>
+                    <li><strong>Créditos:</strong> No te acredites como el creador de este port, pues no solo porque es claro que no es tuyo, si no porque sería lo mejor para evitar problemas con algún chistoso que se le dé por delatarte, solo disfruta este mod y haz que otros lo disfruten. <strong>Agrégale a la contraseña un "." al final.</strong></li>
+                    <li><strong>Mods Derivados:</strong> Si quieren crear otros mods a base de este, pueden hacerlo. Al final, esto no está en GameBanana, no podré tener control de lo que hagan con este mod.</li>
+                    <li><strong>Única excepción a esto:</strong> P-Slice. No quiero ver mis iconos en ese motor.</li>
+                    <li><strong>Parches Personalizados:</strong> Pueden crear parches propios para este mod y compartirlo con amigos y seguidores, muchos queremos que este mod sea siempre jugable con la mejor experiencia posible.</li>
+                </ul>
+                <p>Gracias por leerme y disfruta del mod :)</p>
+                
+                <div class="password-box">
+                    <p style="margin: 0; color: #fff; font-size: 1.5em; letter-spacing: 2px;">La contraseña es: <span style="color: var(--accent-pink);">massSarvPass</span></p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: var(--text-muted);">¿No funciona? Lee de nuevo el documento.</p>
+                </div>
+            </div>
+        </main>
+
+        <aside class="sidebar">
+            <a href="https://gofile.io/d/qo5WSG" target="_blank" class="btn-download">Download Mod</a>
+            
+            <div class="info-box">
+                <h3 class="info-title">Mod Info</h3>
+                <ul class="meta-list">
+                    <li><span class="meta-label">Mod Version</span> <span class="meta-value">1.0.0</span></li>
+                    <li><span class="meta-label">API Version</span> <span class="meta-value">0.8.4</span></li>
+                    <li><span class="meta-label">License</span> <span class="meta-value">CC BY 4.0, MIT</span></li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3 class="info-title">Credits</h3>
+                
+                <div class="credit-item">
+                    <span class="credit-name">M*k****tte</span>
+                    <span class="credit-role">Port Creator and Main Coder</span>
+                </div>
+
+                <div class="credit-item">
+                    <span class="credit-name">Dokki.Doodlez</span>
+                    <span class="credit-role">Sarvente and Mid Fight Masses OG Creator, OG charter. If this port reached you for some reason, believe me, to this day I still feel bad about what this community did to you. Great mod dude.</span>
+                </div>
+
+                <div class="credit-item">
+                    <a href="https://www.youtube.com/channel/UCyDQKOgEjuIiuPXctcuQKlg" target="_blank" class="credit-name">Mike Geno</a>
+                    <span class="credit-role">Compositor</span>
+                </div>
+
+                <div class="credit-item">
+                    <span class="credit-name">D****W**</span>
+                    <span class="credit-role">Recharter and Cutscenes Cameraman</span>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        function switchLanguage(lang) {
+            const contentEn = document.getElementById('content-en');
+            const contentEs = document.getElementById('content-es');
+            const btnEn = document.getElementById('btn-en');
+            const btnEs = document.getElementById('btn-es');
+
+            if (lang === 'en') {
+                contentEn.style.display = 'block';
+                contentEs.style.display = 'none';
+                btnEn.classList.add('active');
+                btnEs.classList.remove('active');
+            } else {
+                contentEn.style.display = 'none';
+                contentEs.style.display = 'block';
+                btnEs.classList.add('active');
+                btnEn.classList.remove('active');
+            }
+        }
+
+        function moveSlide(buttonElement, direction) {
+            const container = buttonElement.closest('.gallery-container');
+            const trackElement = container.querySelector('.carousel-track');
+            const imageElements = trackElement.querySelectorAll('img');
+            const totalSlides = imageElements.length;
+
+            if (totalSlides <= 1) return;
+
+            let currentSlide = parseInt(trackElement.getAttribute('data-slide') || '0');
+            currentSlide += direction;
+
+            if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            } else if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            }
+
+            trackElement.setAttribute('data-slide', currentSlide);
+            trackElement.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+    </script>
+</body>
+</html>
