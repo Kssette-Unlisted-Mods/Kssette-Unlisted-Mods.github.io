@@ -275,6 +275,86 @@
             font-family: 'PhantomMuff', sans-serif;
         }
 
+        .changelog-box {
+            background-color: rgba(0,0,0,0.4);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px; /* Movido arriba de todo */
+            position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .changelog-box h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-family: 'Letterstuff', cursive;
+            letter-spacing: 1px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .changelog-date {
+            color: var(--accent-pink);
+            font-weight: bold;
+            font-family: 'PhantomMuff', sans-serif;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .readme-content ul.changelog-list {
+            background: transparent;
+            padding: 0;
+            border: none;
+            margin: 10px 0 0 0;
+            list-style: none;
+        }
+
+        .changelog-list li {
+            margin-bottom: 8px;
+            font-size: 1em;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Generic Tags Support */
+        .changelog-tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .tag-bugfix {
+            background-color: rgba(240, 48, 107, 0.15);
+            color: var(--accent-pink);
+            border: 1px solid rgba(240, 48, 107, 0.3);
+        }
+
+        .tag-update {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .tag-feature {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tag-rework {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
         .info-box {
             background: linear-gradient(135deg, rgba(45, 25, 75, 0.4) 0%, rgba(15, 8, 30, 0.6) 100%);
             backdrop-filter: blur(30px);
@@ -440,6 +520,18 @@
             </div>
 
             <div id="content-en" class="readme-content">
+                <!-- INJECT_CHANGELOG_EN -->
+                <div class="changelog-box">
+                    <h3>Changelog</h3>
+                    <span class="changelog-date">28/04/2026</span>
+                    <ul class="changelog-list">
+                        <li>
+                            <span class="changelog-tag tag-bugfix">BugFix</span>
+                            <span>Fixed an issue preventing new players from playing the secret song after clearing Zavodila on Hard or Alt in Story Mode.</span>
+                        </li>
+                    </ul>
+                </div>
+
                 <p>Hello! If you have this download link, I want to thank you for downloading this mod.</p>
                 <p>However, I would like you to keep a few things in mind:</p>
                 <ul>
@@ -459,6 +551,18 @@
             </div>
 
             <div id="content-es" class="readme-content" style="display: none;">
+                <!-- INJECT_CHANGELOG_ES -->
+                <div class="changelog-box">
+                    <h3>Registro de Cambios</h3>
+                    <span class="changelog-date">28/04/2026</span>
+                    <ul class="changelog-list">
+                        <li>
+                            <span class="changelog-tag tag-bugfix">BugFix</span>
+                            <span>Se arregló un bug que no permitía a nuevos jugadores jugar la canción secreta después de pasar Zavodila en Hard o Alt en Story Mode.</span>
+                        </li>
+                    </ul>
+                </div>
+
                 <p>Hola, si tienes este link de descarga te damos las gracias por descargar este mod.</p>
                 <p>Pero quiero que tengas cosas a consideración:</p>
                 <ul>
